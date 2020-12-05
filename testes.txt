@@ -1,0 +1,36 @@
+yarn add -y
+yarn add express
+
+usar "sucrase" para mudar de:
+const express = require('express')   => import express from 'express'
+module.exports = new App().server;  => exports default
+yarn add sucrase nodemon -D
+yarn sucrase-node src/server.js
+add nodemon.json
+configurar debug vscode
+yarn dev:debug - verificar  console vsccode "terminal"
+--docker---
+https://hub.docker.com/_/postgres
+ docker run --name db_postgres -e POSTGRES_PASSWORD=docker -p 5432:5432 -d postgres
+ docker start id(postgres), docker logs id
+ --controller: apenas 5 metodos(crud)
+ eslint(standar,airbnb)
+  yarn add eslint -D
+  yarn eslint --init
+  add eslint vscode
+  yarn add prettier eslint-config-prettier eslint-plugin-prettier -D
+  yarn eslint --fix src --ext .js
+  add plugin editorconfig e arquivo editorconfig (padroniza todos editores,trabalho em grupo)
+yarn add sequelize
+yarn add sequelize-cli -D  (interface linha cmd)
+add .sequelizerc
+yarn add pg pg-hstore (dep do sequelize)
+--migrates---
+yarn sequelize migration:create --name=create-users
+yarn sequelize db:migrate
+//desfazer 1 migrations ou tdas
+yarn sequelize db:migrate:undo  ou yarn sequelize db:migrate:undo:all
+yarn add bcryptjs
+---jwt---
+yarn add jsonwebtoken
+apos login e senha  retorna um token(headers,paylod,assinatura)
