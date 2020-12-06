@@ -11,6 +11,7 @@ class User extends Model {
         password: Sequelize.VIRTUAL, // so existe no codigo , nao existe no banco
         password_hash: Sequelize.STRING,
         provider: Sequelize.BOOLEAN,
+        // avatar_id -> incluso no relacionamento
       },
       {
         sequelize,
@@ -24,6 +25,12 @@ class User extends Model {
     });
     //  retorna init()
     return this;
+  }
+
+  // Esta Tabela (User) tem a fk avatar_id (File)
+  // avatar_id =>tem os campos de file e user
+  static associate(models) {
+    this.belongsTo(models.File, { foreignKey: 'avatar_id', as: 'avatar' }); // id de File
   }
 
   checkPassword(password) {

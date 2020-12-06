@@ -1,10 +1,30 @@
 import { Router } from 'express';
+
+import multer from 'multer';
+import multerConfig from './config/multer';
+
 import UserController from './app/controllers/UserController';
 import SessionController from './app/controllers/SessionController';
-const routes = new Router();
+import authMiddleware from './app/middlewares/auth';
+import FileController from './app/controllers/FileController';
+import ProviderController from './app/controllers/ProviderController';
+import AppointmentController from './app/controllers/AppointmentController';
 
-routes.post('/users', UserController.store);
+const routes = new Router();
+const upload = multer(multerConfig);
+
+// routes.use(authMiddleware) // bloqueia todas as rotas abaixo
 routes.post('/sessions', SessionController.store);
+routes.post('/users', UserController.store);
+routes.put('/users', authMiddleware, UserController.update);
+routes.post(
+  '/files',
+  [authMiddleware, upload.single('arquivo')],
+  FileController.store
+);
+routes.get('/providers', authMiddleware, ProviderController.index);
+routes.post('/appointments', authMiddleware, AppointmentController.store);
+
 export default routes;
 
 /*
