@@ -1,6 +1,7 @@
 import User from '../models/User';
 import File from '../models/File';
 
+//  ---- PRESTADORES DE SERVICO ------
 class ProviderController {
   async index(req, res) {
     const providers = await User.findOne({
