@@ -28,10 +28,10 @@ class Database {
   // cria o banco automaticamente no mongodb compass, ao CRIAR um novo registro
   mongo() {
     //  useNewAndModify: true, old version
-    this.mongo.Connection = mongoose.connect(
-      'mongodb://localhost:27017/gobarber',
-      { useNewUrlParser: true, useUnifiedTopology: true }
-    );
+    this.mongo.Connection = mongoose.connect(process.env.MONGO_URL, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
   }
 }
 export default new Database();

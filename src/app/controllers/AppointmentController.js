@@ -5,9 +5,8 @@ import pt from 'date-fns/locale/pt';
 import User from '../models/User';
 import File from '../models/File';
 import Notification from '../schemas/Notification';
-import Mail from '../../lib/Mail';
-import mail from '../../config/mail';
-
+import Queue from '../../lib/Queue';
+import CancellationMail from '../jobs/CancellationMail';
 //  ---- AGENDAMENTO ------
 class AppointmentController {
   async index(req, res) {
@@ -17,7 +16,7 @@ class AppointmentController {
     const appointments = await Appointment.findAll({
       where: { user_id: req.userId, canceled_at: null },
       order: ['date'], // ordernar por data
-      attributes: ['id', 'date'], // trazer somente id e date
+      attributes: ['id', 'date', 'past', 'cancelable'], // trazer somente id e date
       limit: 20,
       offset: (page - 1) * 20,
       // relacionamento com user
@@ -125,6 +124,11 @@ class AppointmentController {
           as: 'provider',
           attributes: ['name', 'email'],
         },
+        {
+          model: User,
+          as: 'user',
+          attributes: ['name'],
+        },
       ],
     });
 
@@ -145,12 +149,11 @@ class AppointmentController {
 
     await appointment.save();
 
-    // Enviar email apos o cancelamennto
-    await Mail.sendMail({
-      to: `${appointment.provider.name} <${appointment.provider.email}>`,
-      subject: 'Agendamento cancelado',
-      text: 'Voce tem um novo cancelamento',
+    // Enviar email apos o cancelamennto, utilizando as QUEUE
+    await Queue.add(CancellationMail.key, {
+      appointment, // dados passados
     });
+
     return res.json(appointment);
   }
 }

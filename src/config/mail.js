@@ -1,12 +1,10 @@
-import SessionController from '../app/controllers/SessionController';
-
 export default {
-  host: 'smtp.mailtrap.io',
-  port: 2525,
+  host: process.env.MAIL_HOST,
+  port: process.env.MAIL_PORT,
   secure: false,
   auth: {
-    user: 'e59e1f9d53ed0e',
-    pass: 'c18b76d71ed352',
+    user: process.env.MAIL_USER,
+    pass: process.env.MAIL_PASS,
   },
   default: {
     from: 'support gobarber <noreplay@gobarber.com>',
